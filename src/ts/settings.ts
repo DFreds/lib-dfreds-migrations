@@ -4,14 +4,19 @@ class Settings {
     // Settings keys
     #SAMPLE = "sample";
 
+    #RAN_MIGRATIONS = "ranMigrations";
+
     register(): void {
-        game.settings.register(MODULE_ID, this.#SAMPLE, {
-            name: "ModuleTemplate.Settings.SampleSetting.Name",
-            hint: "ModuleTemplate.Settings.SampleSetting.Hint",
+        this.#registerRanMigrations();
+    }
+
+    #registerRanMigrations(): void {
+        game.settings.register(MODULE_ID, this.#RAN_MIGRATIONS, {
+            name: "Ran Migrations",
             scope: "world",
-            config: true,
-            default: true,
-            type: Boolean,
+            config: false,
+            default: {},
+            type: Object,
         });
     }
 

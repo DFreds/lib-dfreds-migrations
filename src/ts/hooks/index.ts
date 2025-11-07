@@ -5,7 +5,7 @@ interface Listener {
     listen(): void;
 }
 
-const HooksModule: Listener = {
+const HooksMigrations: Listener = {
     listen(): void {
         const listeners: Listener[] = [Init, Setup];
 
@@ -15,5 +15,5 @@ const HooksModule: Listener = {
     },
 };
 
-export { HooksModule };
+export { HooksMigrations };
 export type { Listener };

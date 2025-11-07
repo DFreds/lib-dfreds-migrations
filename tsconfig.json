@@ -51,6 +51,7 @@
         "./src/**/*",
         "./tests/**/*.ts",
         "./types/foundry/global-external.d.mts",
+        "./types/migrations/index.d.ts",
         "./vite.config.ts"
     ],
     "watchOptions": {

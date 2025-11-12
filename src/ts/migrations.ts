@@ -26,6 +26,10 @@ class MigrationsImpl implements Migrations {
     }
 
     register({ moduleId }: { moduleId: string }): void {
+        if (!game.modules.get(moduleId)) {
+            throw new Error(`Module ${moduleId} does not exist`);
+        }
+
         this.#settings.addMigrationSetting({ moduleId });
     }
 

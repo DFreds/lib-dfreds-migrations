@@ -1,5 +1,6 @@
 import { Init } from "./init.ts";
 import { Setup } from "./setup.ts";
+import { Ready } from "./ready.ts";
 
 interface Listener {
     listen(): void;
@@ -7,7 +8,7 @@ interface Listener {
 
 const HooksMigrations: Listener = {
     listen(): void {
-        const listeners: Listener[] = [Init, Setup];
+        const listeners: Listener[] = [Init, Setup, Ready];
 
         for (const listener of listeners) {
             listener.listen();

@@ -1,4 +1,5 @@
 import { Listener } from "./index.ts";
+import { MigrationsImpl } from "../migrations.ts";
 
 const Setup: Listener = {
     listen(): void {
@@ -6,6 +7,8 @@ const Setup: Listener = {
             if (BUILD_MODE === "development") {
                 CONFIG.debug.hooks = true;
             }
+
+            MigrationsImpl.setup();
         });
     },
 };

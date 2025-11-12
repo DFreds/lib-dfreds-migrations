@@ -8,7 +8,7 @@
         "verified": 13,
         "maximum": 13
     },
-    "esmodules": ["vendor.mjs", "lib-dfreds-migrations.mjs"],
+    "esmodules": ["lib-dfreds-migrations.mjs"],
     "scripts": [],
     "styles": ["styles/lib-dfreds-migrations.css"],
     "packs": [],

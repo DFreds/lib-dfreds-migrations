@@ -57,7 +57,6 @@ const config = Vite.defineConfig(({ command, mode }): Vite.UserConfig => {
             "./lib-dfreds-migrations.mjs",
             `/** ${message} */\n\nwindow.global = window;\nimport "./src/ts/module.ts";\n`,
         );
-        fs.writeFileSync("./vendor.mjs", `/** ${message} */\n`);
     }
 
     return {

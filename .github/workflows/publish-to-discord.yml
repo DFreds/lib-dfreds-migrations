@@ -16,5 +16,5 @@ jobs:
         with:
           webhook_url: ${{ secrets.DISCORD_WEBHOOK_URL }}
           username: "Lib: DFreds Migrations - Release"
-          content: "<@&1200173776898371635> <@&TODO_OTHER_ROLE_ID>"
+          content: "<@&1200173776898371635> <@&1440016459253420053>"
           footer_timestamp: true

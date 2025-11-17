@@ -39,6 +39,6 @@
     "readme": "https://github.com/DFreds/lib-dfreds-migrations/blob/main/README.md",
     "bugs": "https://github.com/DFreds/lib-dfreds-migrations/issues",
     "changelog": "https://github.com/DFreds/lib-dfreds-migrations/releases",
-    "library": false,
+    "library": true,
     "media": []
 }

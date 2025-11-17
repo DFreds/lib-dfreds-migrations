@@ -73,7 +73,9 @@ declare global {
         date: Date;
 
         /**
-         * The migration function
+         * The migration function. It should return true if the migration was
+         * successful, false otherwise. If it returns false, the migration will
+         * not be added to the list of migrations that ran.
          */
         func: () => Promise<boolean>;
     }

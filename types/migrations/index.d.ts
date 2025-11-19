@@ -1,5 +1,3 @@
-import { ApplicationV2 } from "types/foundry/client-esm/applications/_types.js";
-
 export {};
 
 declare global {
@@ -114,4 +112,6 @@ declare global {
         function once(...args: HookParamsMigrationsSetup): number;
         function once(...args: HookParamsMigrationsRun): number;
     }
+
+    let migrations: Migrations;
 }

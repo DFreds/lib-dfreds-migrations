@@ -113,5 +113,5 @@ declare global {
         function once(...args: HookParamsMigrationsRun): number;
     }
 
-    let migrations: Migrations;
+    const migrations: Migrations;
 }

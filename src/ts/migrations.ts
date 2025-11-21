@@ -64,7 +64,14 @@ class MigrationsImpl implements Migrations {
         return ranMigrations.includes(key);
     }
 
+    // TODO the name of the first migration to fail should be returned?
+    // TODO whether or not to show info message?
     async runAll({ moduleId }: { moduleId: string }): Promise<boolean> {
+        if (!game.user.isGM) {
+            log(`Skipping migrations for module ${moduleId} because user is not a GM`);
+            return true;
+        }
+
         try {
             const sortedMigrations = this.#migrations[moduleId].sort(
                 (a, b) => a.date.getTime() - b.date.getTime(),
@@ -81,7 +88,10 @@ class MigrationsImpl implements Migrations {
 
                 const success = await migration.func();
                 if (success) {
-                    await this.#settings.addRanMigration({ moduleId, migration: migration.key });
+                    await this.#settings.addRanMigration({
+                        moduleId,
+                        migration: migration.key,
+                    });
                 } else {
                     error(
                         `Failed to run migration ${migration.key} for module ${moduleId}. Halting migration process.`,

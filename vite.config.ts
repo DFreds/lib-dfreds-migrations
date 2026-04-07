@@ -3,21 +3,22 @@ import checker from "vite-plugin-checker";
 import esbuild from "esbuild";
 import fs from "fs";
 import path from "path";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import packageJSON from "./package.json" with { type: "json" };
 
-const PACKAGE_ID = "modules/lib-dfreds-migrations";
+const MODULE_ID = "lib-dfreds-migrations";
 
 const config = Vite.defineConfig(({ command, mode }): Vite.UserConfig => {
     const buildMode =
         mode === "production"
             ? "production"
             : mode === "stage"
-              ? "stage"
-              : "development";
+                ? "stage"
+                : "development";
     const outDir = "dist";
-    const plugins = [checker({ typescript: true }), tsconfigPaths()];
+
+    const plugins = [
+        checker({ typescript: true })
+    ];
 
     console.log(`Build mode: ${buildMode}`);
 
@@ -38,6 +39,7 @@ const config = Vite.defineConfig(({ command, mode }): Vite.UserConfig => {
         );
     } else {
         plugins.push(
+            touchVendorMjsPlugin(outDir),
             handleHotUpdateForEnLang(outDir),
             handleHotUpdateForHandlebars(outDir),
         );
@@ -50,52 +52,63 @@ const config = Vite.defineConfig(({ command, mode }): Vite.UserConfig => {
         fs.writeFileSync("./index.html", `<h1>${message}</h1>\n`);
         if (!fs.existsSync("./styles")) fs.mkdirSync("./styles");
         fs.writeFileSync(
-            "./styles/lib-dfreds-migrations.css",
+            `./styles/${MODULE_ID}.css`,
             `/** ${message} */\n`,
         );
         fs.writeFileSync(
-            "./lib-dfreds-migrations.mjs",
+            `./${MODULE_ID}.mjs`,
             `/** ${message} */\n\nwindow.global = window;\nimport "./src/ts/module.ts";\n`,
         );
+        fs.writeFileSync("./vendor.mjs", `/** ${message} */\n`);
     }
+
+    const codeSplitting: Vite.Rolldown.CodeSplittingOptions =
+        buildMode === "production" || buildMode === "stage"
+            ? {
+                groups: [
+                    {
+                        name: "vendor",
+                        test: /node_modules/,
+                    },
+                ],
+            }
+            : {};
 
     return {
         base:
-            command === "build" ? "./" : `/modules/lib-dfreds-migrations/`,
+            command === "build" ? "./" : `/modules/${MODULE_ID}/`,
         publicDir: "static",
         define: {
             BUILD_MODE: JSON.stringify(buildMode),
         },
         esbuild: { keepNames: true },
+        resolve: { tsconfigPaths: true },
         build: {
             outDir,
             emptyOutDir: false,
             minify: false,
             sourcemap: buildMode === "development",
             lib: {
-                name: "lib-dfreds-migrations",
+                name: MODULE_ID,
                 entry: "src/ts/module.ts",
                 formats: ["es"],
-                fileName: "module",
+                fileName: MODULE_ID,
             },
-            rollupOptions: {
+            rolldownOptions: {
                 external: [
                     // Foundry VTT internal modules
                     /^@client\//,
                     /^@common\//,
                 ],
                 output: {
-                    assetFileNames: "styles/lib-dfreds-migrations.css",
+                    assetFileNames: `styles/${MODULE_ID}.css`,
                     chunkFileNames: "[name].mjs",
-                    entryFileNames: "lib-dfreds-migrations.mjs",
-                    manualChunks: {
-                        vendor: Object.keys(packageJSON.dependencies)
-                            ? Object.keys(packageJSON.dependencies)
-                            : [],
-                    },
+                    entryFileNames: `${MODULE_ID}.mjs`,
+                    codeSplitting,
                 },
+                watch: { buildDelay: 100 },
             },
-            target: "es2022",
+            target: "es2024",
         },
 
         // About server options:
@@ -136,11 +149,11 @@ function minifyPlugin(): Vite.Plugin {
             async handler(code, chunk) {
                 return chunk.fileName.endsWith(".mjs")
                     ? esbuild.transform(code, {
-                          keepNames: true,
-                          minifyIdentifiers: false,
-                          minifySyntax: true,
-                          minifyWhitespace: true,
-                      })
+                        keepNames: true,
+                        minifyIdentifiers: false,
+                        minifySyntax: true,
+                        minifyWhitespace: true,
+                    })
                     : code;
             },
         },
@@ -157,9 +170,22 @@ function deleteLockFilePlugin(): Vite.Plugin {
             const outDir = outputOptions.dir ?? "";
             const lockFile = path.resolve(
                 outDir,
-                "lib-dfreds-migrations.lock",
+                `${MODULE_ID}.lock`,
             );
             fs.rmSync(lockFile);
+        },
+    };
+}
+
+function touchVendorMjsPlugin(outDir: string): Vite.Plugin {
+    // Foundry expects all esm files listed in module.json to exist: create empty vendor module when in dev mode
+    return {
+        name: "touch-vendor-mjs",
+        apply: "build",
+        writeBundle: {
+            async handler() {
+                fs.closeSync(fs.openSync(path.resolve(outDir, "vendor.mjs"), "w"));
+            },
         },
     };
 }
@@ -173,16 +199,14 @@ function handleHotUpdateForEnLang(outDir: string): Vite.Plugin {
             if (!context.file.endsWith("en.json")) return;
 
             const basePath = context.file.slice(context.file.indexOf("lang/"));
-            console.log(`Updating lang file at ${basePath}`);
-            fs.promises
-                .copyFile(context.file, `${outDir}/${basePath}`)
-                .then(() => {
-                    context.server.ws.send({
-                        type: "custom",
-                        event: "lang-update",
-                        data: { path: `${PACKAGE_ID}/${basePath}` },
-                    });
-                });
+            console.debug(`Updating lang file at ${basePath}`);
+            const content = fs.readFileSync(context.file, { encoding: "utf-8" });
+            fs.writeFileSync(path.join(outDir, basePath), content);
+            context.server.ws.send({
+                type: "custom",
+                event: "lang-update",
+                data: { path: `modules/${MODULE_ID}/${basePath}` },
+            });
         },
     };
 }
@@ -195,19 +219,15 @@ function handleHotUpdateForHandlebars(outDir: string): Vite.Plugin {
             if (context.file.startsWith(outDir)) return;
             if (!context.file.endsWith(".hbs")) return;
 
-            const basePath = context.file.slice(
-                context.file.indexOf("templates/"),
-            );
-            console.log(`Updating template file at ${basePath}`);
-            fs.promises
-                .copyFile(context.file, `${outDir}/${basePath}`)
-                .then(() => {
-                    context.server.ws.send({
-                        type: "custom",
-                        event: "template-update",
-                        data: { path: `${PACKAGE_ID}/${basePath}` },
-                    });
+            const basePath = context.file.slice(context.file.indexOf("templates/"));
+            console.debug(`Updating template file at ${basePath}`);
+            fs.promises.copyFile(context.file, `${outDir}/${basePath}`).then(() => {
+                context.server.ws.send({
+                    type: "custom",
+                    event: "template-update",
+                    data: { path: `modules/${MODULE_ID}/${basePath}` },
                 });
+            });
         },
     };
 }

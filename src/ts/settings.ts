@@ -10,7 +10,7 @@ class Settings {
 
     addMigrationSetting({ moduleId }: { moduleId: string }): void {
         try {
-            game.settings.get(MODULE_ID, moduleId) as string[];
+            game.settings.get(MODULE_ID, moduleId) as unknown as string[];
         } catch (error) {
             console.log("Adding migration setting for", moduleId);
             game.settings.register(MODULE_ID, moduleId, {
@@ -24,7 +24,7 @@ class Settings {
     }
 
     getRanMigrations({ moduleId }: { moduleId: string }): string[] {
-        return game.settings.get(MODULE_ID, moduleId) as string[];
+        return game.settings.get(MODULE_ID, moduleId) as unknown as string[];
     }
 
     async addRanMigration({

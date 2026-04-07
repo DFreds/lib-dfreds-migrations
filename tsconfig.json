@@ -37,35 +37,21 @@
         "noErrorTruncation": true,
         "paths": {
             "@static/*": ["./static/*"],
-            "@common/*": [
-                "./types/foundry/common/*"
-            ],
-            "@client/*": [
-                "./types/foundry/client/*"
-            ]
+            "@common/*": ["./types/foundry/common/*"],
+            "@client/*": ["./types/foundry/client/*"]
         },
-        "types": [
-            "jest",
-            "jquery",
-            "node"
-        ],
-        "typeRoots": [
-            "./node_modules/@types",
-            "./types/foundry"
-        ]
+        "types": ["jest", "jquery", "node"],
+        "typeRoots": ["./node_modules/@types", "./types/foundry"]
     },
     "include": [
         "./src/**/*",
         "./tests/**/*.ts",
         "./types/foundry/global-external.d.mts",
+        "./types/migrations/index.d.ts",
         "./vite.config.ts"
     ],
     "watchOptions": {
         "fallbackPolling": "dynamicpriority",
-        "excludeDirectories": [
-            "dist",
-            "packs",
-            "static"
-        ]
+        "excludeDirectories": ["dist", "packs", "static"]
     }
 }

@@ -2,7 +2,7 @@
     "id": "lib-dfreds-migrations",
     "title": "Lib: DFreds Migrations",
     "description": "A FoundryVTT module to make it easy to run and track migrations",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "compatibility": {
         "minimum": 13,
         "verified": 14
@@ -33,7 +33,7 @@
     "socket": false,
     "url": "https://github.com/DFreds/lib-dfreds-migrations",
     "manifest": "https://github.com/DFreds/lib-dfreds-migrations/releases/latest/download/module.json",
-    "download": "https://github.com/DFreds/lib-dfreds-migrations/releases/download/v1.0.0/lib-dfreds-migrations.zip",
+    "download": "https://github.com/DFreds/lib-dfreds-migrations/releases/download/v1.0.3/lib-dfreds-migrations.zip",
     "license": "https://github.com/DFreds/lib-dfreds-migrations/blob/main/LICENSE",
     "readme": "https://github.com/DFreds/lib-dfreds-migrations/blob/main/README.md",
     "bugs": "https://github.com/DFreds/lib-dfreds-migrations/issues",

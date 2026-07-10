@@ -27,13 +27,7 @@ class Settings {
         return game.settings.get(MODULE_ID, moduleId) as unknown as string[];
     }
 
-    async addRanMigration({
-        moduleId,
-        migration,
-    }: {
-        moduleId: string;
-        migration: string;
-    }): Promise<void> {
+    async addRanMigration({ moduleId, migration }: { moduleId: string; migration: string }): Promise<void> {
         let ranMigrations = this.getRanMigrations({ moduleId });
         ranMigrations.push(migration);
         ranMigrations = [...new Set(ranMigrations)]; // remove duplicates

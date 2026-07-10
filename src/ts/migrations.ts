@@ -33,13 +33,7 @@ class MigrationsImpl implements Migrations {
         this.#settings.addMigrationSetting({ moduleId });
     }
 
-    addMigration({
-        moduleId,
-        migration,
-    }: {
-        moduleId: string;
-        migration: MigrationType;
-    }): void {
+    addMigration({ moduleId, migration }: { moduleId: string; migration: MigrationType }): void {
         if (!this.#migrations[moduleId]) {
             this.#migrations[moduleId] = [];
         }
@@ -47,13 +41,7 @@ class MigrationsImpl implements Migrations {
         this.#migrations[moduleId].push(migration);
     }
 
-    addMigrations({
-        moduleId,
-        migrations,
-    }: {
-        moduleId: string;
-        migrations: MigrationType[];
-    }): void {
+    addMigrations({ moduleId, migrations }: { moduleId: string; migrations: MigrationType[] }): void {
         for (const migration of migrations) {
             this.addMigration({ moduleId, migration });
         }
@@ -73,18 +61,14 @@ class MigrationsImpl implements Migrations {
         }
 
         try {
-            const sortedMigrations = this.#migrations[moduleId].sort(
-                (a, b) => a.date.getTime() - b.date.getTime(),
-            );
+            const sortedMigrations = this.#migrations[moduleId].sort((a, b) => a.date.getTime() - b.date.getTime());
 
             for (const migration of sortedMigrations) {
                 if (this.hasRan({ moduleId, key: migration.key })) {
                     continue;
                 }
 
-                log(
-                    `Running migration ${migration.key} for module ${moduleId}`,
-                );
+                log(`Running migration ${migration.key} for module ${moduleId}`);
 
                 const success = await migration.func();
                 if (success) {
@@ -99,16 +83,12 @@ class MigrationsImpl implements Migrations {
                     return false;
                 }
 
-                log(
-                    `Successfully ran migration ${migration.key} for module ${moduleId}`,
-                );
+                log(`Successfully ran migration ${migration.key} for module ${moduleId}`);
             }
 
             return true;
         } catch (e: any) {
-            error(
-                "Something went wrong while running migrations for module ${moduleId}: ${e}",
-            );
+            error("Something went wrong while running migrations for module ${moduleId}: ${e}");
             return false;
         }
     }

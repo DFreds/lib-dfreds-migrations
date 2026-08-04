@@ -95,7 +95,7 @@ class MigrationsImpl implements Migrations {
 
             return true;
         } catch (e: any) {
-            error("Something went wrong while running migrations for module ${moduleId}: ${e}");
+            error(`Something went wrong while running migrations for module ${moduleId}: ${e}`);
             return false;
         }
     }

@@ -55,13 +55,20 @@ class MigrationsImpl implements Migrations {
     // TODO the name of the first migration to fail should be returned?
     // TODO whether or not to show info message?
     async runAll({ moduleId }: { moduleId: string }): Promise<boolean> {
+        // A module can register without ever adding a migration. There is nothing
+        // to do and nothing to report, for a GM or anyone else.
+        const migrations = this.#migrations[moduleId];
+        if (!migrations || migrations.length === 0) {
+            return true;
+        }
+
         if (!game.user.isGM) {
             log(`Skipping migrations for module ${moduleId} because user is not a GM`);
             return true;
         }
 
         try {
-            const sortedMigrations = this.#migrations[moduleId].sort((a, b) => a.date.getTime() - b.date.getTime());
+            const sortedMigrations = migrations.sort((a, b) => a.date.getTime() - b.date.getTime());
 
             for (const migration of sortedMigrations) {
                 if (this.hasRan({ moduleId, key: migration.key })) {

@@ -9,20 +9,14 @@
     },
     "esmodules": ["lib-dfreds-migrations.mjs"],
     "scripts": [],
-    "styles": ["styles/lib-dfreds-migrations.css"],
+    "styles": [],
     "packs": [],
     "packFolders": [],
     "relationships": {
         "systems": [],
         "requires": []
     },
-    "languages": [
-        {
-            "lang": "en",
-            "name": "English",
-            "path": "lang/en.json"
-        }
-    ],
+    "languages": [],
     "authors": [
         {
             "name": "DFreds",

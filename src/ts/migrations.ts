@@ -67,6 +67,7 @@ class MigrationsImpl implements Migrations {
                 log(`Running migration ${migration.key} for module ${moduleId}`);
 
                 const success = await migration.func();
+                Hooks.callAll("migrations.run", migration, success);
                 if (success) {
                     await this.#settings.addRanMigration({
                         moduleId,

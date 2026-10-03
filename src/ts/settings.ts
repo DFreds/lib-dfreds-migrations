@@ -2,18 +2,16 @@ import { MODULE_ID } from "./constants.ts";
 
 class Settings {
     addMigrationSetting({ moduleId }: { moduleId: string }): void {
-        try {
-            game.settings.get(MODULE_ID, moduleId) as unknown as string[];
-        } catch (error) {
-            console.log("Adding migration setting for", moduleId);
-            game.settings.register(MODULE_ID, moduleId, {
-                name: `Ran Migrations for ${moduleId}`,
-                scope: "world",
-                config: false,
-                default: [],
-                type: Array,
-            });
-        }
+        if (game.settings.settings.has(`${MODULE_ID}.${moduleId}`)) return;
+
+        console.log("Adding migration setting for", moduleId);
+        game.settings.register(MODULE_ID, moduleId, {
+            name: `Ran Migrations for ${moduleId}`,
+            scope: "world",
+            config: false,
+            default: [],
+            type: Array,
+        });
     }
 
     getRanMigrations({ moduleId }: { moduleId: string }): string[] {

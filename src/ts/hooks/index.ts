@@ -1,3 +1,4 @@
+import { HotReload } from "./hot-reload.ts";
 import { Init } from "./init.ts";
 import { Setup } from "./setup.ts";
 import { Ready } from "./ready.ts";
@@ -8,7 +9,7 @@ interface Listener {
 
 const HooksMigrations: Listener = {
     listen(): void {
-        const listeners: Listener[] = [Init, Setup, Ready];
+        const listeners: Listener[] = [HotReload, Init, Setup, Ready];
 
         for (const listener of listeners) {
             listener.listen();

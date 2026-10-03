@@ -1,10 +1,11 @@
 import { MODULE_ID } from "./constants.ts";
+import { log } from "./logger.ts";
 
 class Settings {
     addMigrationSetting({ moduleId }: { moduleId: string }): void {
         if (game.settings.settings.has(`${MODULE_ID}.${moduleId}`)) return;
 
-        console.log("Adding migration setting for", moduleId);
+        log(`Adding migration setting for ${moduleId}`);
         game.settings.register(MODULE_ID, moduleId, {
             name: `Ran Migrations for ${moduleId}`,
             scope: "world",

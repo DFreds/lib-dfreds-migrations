@@ -2,13 +2,8 @@ import { error, log } from "./logger.ts";
 import { Settings } from "./settings.ts";
 
 class MigrationsImpl implements Migrations {
-    #migrations: Record<string, MigrationType[]>;
-    #settings: Settings;
-
-    constructor() {
-        this.#migrations = {};
-        this.#settings = new Settings();
-    }
+    #migrations: Record<string, MigrationType[]> = {};
+    #settings = new Settings();
 
     static init(): void {
         const migrations = new MigrationsImpl();
@@ -34,17 +29,11 @@ class MigrationsImpl implements Migrations {
     }
 
     addMigration({ moduleId, migration }: { moduleId: string; migration: MigrationType }): void {
-        if (!this.#migrations[moduleId]) {
-            this.#migrations[moduleId] = [];
-        }
-
-        this.#migrations[moduleId].push(migration);
+        (this.#migrations[moduleId] ??= []).push(migration);
     }
 
     addMigrations({ moduleId, migrations }: { moduleId: string; migrations: MigrationType[] }): void {
-        for (const migration of migrations) {
-            this.addMigration({ moduleId, migration });
-        }
+        (this.#migrations[moduleId] ??= []).push(...migrations);
     }
 
     hasRan({ moduleId, key }: { moduleId: string; key: string }): boolean {

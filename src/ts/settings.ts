@@ -1,13 +1,6 @@
 import { MODULE_ID } from "./constants.ts";
 
 class Settings {
-    // Settings keys
-    // #RAN_MIGRATIONS = "ranMigrations";
-
-    register(): void {
-        // this.#registerRanMigrations();
-    }
-
     addMigrationSetting({ moduleId }: { moduleId: string }): void {
         try {
             game.settings.get(MODULE_ID, moduleId) as unknown as string[];

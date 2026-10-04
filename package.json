@@ -12,11 +12,10 @@
         "hot": "vite serve",
         "watch": "tsc && npm run clean && vite build --watch --mode development",
         "link": "tsx ./build/link-foundry.ts",
-        "lint": "npm run lint:ts && npm run lint:json && npm run prettier:scss",
+        "lint": "npm run lint:ts && npm run lint:json",
         "lint:ts": "eslint ./src",
-        "prettier:scss": "prettier --check src/styles",
         "lint:json": "eslint ./static",
-        "lint:fix": "eslint ./src --fix && prettier --write src/styles"
+        "lint:fix": "eslint ./src --fix"
     },
     "author": "DFreds (https://github.com/DFreds)",
     "license": "MIT",

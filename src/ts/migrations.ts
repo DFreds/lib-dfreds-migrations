@@ -47,8 +47,8 @@ class MigrationsImpl implements Migrations {
             return true;
         }
 
-        if (!game.user.isGM) {
-            log(`Skipping migrations for module ${moduleId} because user is not a GM`);
+        if (!game.users.activeGM?.isSelf) {
+            log(`Skipping migrations for module ${moduleId} because user is not the active GM`);
             return true;
         }
 

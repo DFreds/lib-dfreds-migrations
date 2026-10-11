@@ -4,7 +4,7 @@
 <h1 align="center">Lib: DFreds Migrations</h1>
 
 <h4 align="center">
-  <a href="https://github.com/new?template_name=lib-dfreds-migrations&template_owner=DFreds">Use Template</a>
+  <a href="https://foundryvtt.com/packages/lib-dfreds-migrations">Install</a>
   ·
   <a href="https://discord.gg/Wq8AEV9bWb">Discord</a>
   ·
@@ -28,20 +28,14 @@
 </p>
 
 <p align="center">
-    <b>Lib: DFreds Migrations</b> is a FoundryVTT module template that uses Typescript and Vite for development.
+    <b>Lib: DFreds Migrations</b> is a FoundryVTT module library that makes it easy to run and track migrations.
 </p>
 
 ## Features
 
-- Full use of well-defined types provided by [pf2e](https://foundryvtt.com/packages/pf2e)
-- Symlink integration, so you aren't directly messing with the foundry data folder
-- Use of [nvm](https://github.com/nvm-sh/nvm) and npm for node and package management
-- Use of [vite](https://vite.dev/) for building
-- Commands to build for production, staging, or development
-- Commands to configure and run different versions of FoundryVTT
-- Tools to automatically rename the name of the module, update the types, and enforce code linting
-- Powerful GitHub actions that handle releases and (optionally) posting updates to a Discord channel
+- Easily define migrations with a comprehensive API
+- Fully typed library included in repository for Typescript projects
 
 ## Getting Started
 
-### See the [documentation](https://www.dfreds-modules.com/developers/module-template-ts/) page for details.
+### See the [documentation](https://www.dfreds-modules.com/developers/lib-migrations) page for details.

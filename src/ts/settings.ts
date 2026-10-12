@@ -16,6 +16,7 @@ class Settings {
     }
 
     getRanMigrations({ moduleId }: { moduleId: string }): string[] {
+        this.#assertRegistered(moduleId);
         return game.settings.get(MODULE_ID, moduleId) as unknown as string[];
     }
 
@@ -25,7 +26,16 @@ class Settings {
     }
 
     async clearRanMigrations({ moduleId }: { moduleId: string }): Promise<void> {
+        this.#assertRegistered(moduleId);
         await game.settings.set(MODULE_ID, moduleId, []);
+    }
+
+    #assertRegistered(moduleId: string): void {
+        if (game.settings.settings.has(`${MODULE_ID}.${moduleId}`)) return;
+
+        throw new Error(
+            `Module ${moduleId} is not registered with ${MODULE_ID}. Call migrations.register({ moduleId: "${moduleId}" }) first.`,
+        );
     }
 }
 

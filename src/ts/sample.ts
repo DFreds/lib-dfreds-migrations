@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants.ts";
+import { log } from "./logger.ts";
 
 export function mySampleMigrationModule(): void {
     Hooks.once("migrations.setup", (migrations: any) => {
@@ -11,7 +12,7 @@ export function mySampleMigrationModule(): void {
                 key: `2025-11-12-${MODULE_ID}`,
                 date: new Date("2025-11-12"),
                 func: async () => {
-                    console.log("Running my sample migration from 2025-11-12 for", MODULE_ID);
+                    log("Running my sample migration from 2025-11-12");
                     return true;
                 },
             },
@@ -24,7 +25,7 @@ export function mySampleMigrationModule(): void {
                     key: `2025-11-10-${MODULE_ID}`,
                     date: new Date("2025-11-10"),
                     func: async () => {
-                        console.log("Running my sample migration from 2025-11-10 for", MODULE_ID);
+                        log("Running my sample migration from 2025-11-10");
                         return true;
                     },
                 },

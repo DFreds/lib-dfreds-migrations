@@ -53,7 +53,7 @@ class MigrationsImpl implements Migrations {
         }
 
         try {
-            const sortedMigrations = migrations.sort((a, b) => a.date.getTime() - b.date.getTime());
+            const sortedMigrations = migrations.toSorted((a, b) => a.date.getTime() - b.date.getTime());
 
             for (const migration of sortedMigrations) {
                 if (this.hasRan({ moduleId, key: migration.key })) {
